@@ -23,6 +23,8 @@ class Surface extends JPanel
     int opponentPieces = 2;
     int[][] board = new int[8][8];
     int whoseTurn = BLACK;
+    int endFlipX = 0;
+    int endFlipY = 0;
 
     public static final int TOP_MARGIN = 140;
     public static final int LEFT_MARGIN = 100;
@@ -151,6 +153,14 @@ class Surface extends JPanel
      */
     public boolean makesSandwich( int x, int y)
     {      
+        /*
+         **FORMAT**
+        if() // next to opposite color
+            for() // starts checking pieces in that direction
+                if() // if a same color piece is found
+                    // return true;
+         */
+        
         if( y-1 > 0 && board[x][y-1] == getOppositeColor(whoseTurn)) // n
         {
             for( int i = y; i >= 0; i--) // n  
@@ -203,7 +213,7 @@ class Surface extends JPanel
         }
         if( (x+1 < 7 && y-1 > 0) && (board[x+1][y-1] == getOppositeColor(whoseTurn))) // ne
         {
-            for( int i = 0; x+i <= 7 && y-i >= 0; i++) // ne  
+            for( int i = 1; x+i <= 7 && y-i >= 0; i++) // ne  
             {
                 if( board[x+i][y-i] == whoseTurn)
                 {
@@ -213,7 +223,7 @@ class Surface extends JPanel
         }
         if( (x-1 > 0 && y+1 < 7) && (board[x-1][y+1] == getOppositeColor(whoseTurn))) // sw
         {
-            for( int i = 0; x-i >= 0 && y+i <= 7; i++) // sw 
+            for( int i = 1; x-i >= 0 && y+i <= 7; i++) // sw 
             {
                 if( board[x-i][y+i] == whoseTurn)
                 {
@@ -223,7 +233,7 @@ class Surface extends JPanel
         }
         if( (x+1 < 7 && y+1 < 7) && (board[x+1][y+1] == getOppositeColor(whoseTurn))) // se
         {
-            for( int i = 0; x+i <= 7 && y+i <= 7; i++) // se  
+            for( int i = 1; x+i <= 7 && y+i <= 7; i++) // se  
             {
                 if( board[x+i][y+i] == whoseTurn)
                 {
@@ -232,6 +242,164 @@ class Surface extends JPanel
             }     
         }
         return false;
+    }
+    
+    /**
+     * flips
+     * @param x x position
+     * @param y y position
+     */
+    public void flip( int x, int y)
+    {      
+        /*
+         **FORMAT**
+        if() // next to opposite color
+            for() // starts checking pieces in that direction
+                if() // if a same color piece is found
+                    // flips the pieces
+                    // return true;
+         */
+        
+        if( y-1 > 0 && board[x][y-1] == getOppositeColor(whoseTurn)) // n
+        {
+            for( int i = y; i >= 0; i--) // n  
+            {
+                if( board[x][i] == whoseTurn)
+                {
+                    endFlipX = x;
+                    endFlipY = i;
+                    for( int j = y; j >= endFlipY; j--)
+                    {
+                        board[x][j] = whoseTurn;
+                    }
+                }
+            }     
+        }        
+        if( y+1 < 7 && board[x][y+1] == getOppositeColor(whoseTurn)) // s
+        {
+            for( int i = y; i <= 7; i++) // s
+            {
+                if( board[x][i] == whoseTurn)
+                {
+                    endFlipX = x;
+                    endFlipY = i;
+                    for( int j = y; j <= endFlipY; j++)
+                    {
+                        board[x][j] = whoseTurn;
+                    }
+                }
+            }     
+        }
+        if( x+1 < 7  && board[x+1][y] == getOppositeColor(whoseTurn)) // e
+        {
+            for( int i = x; i <= 7; i++) // e  
+            {
+                if( board[i][y] == whoseTurn)
+                {
+                    endFlipX = i;
+                    endFlipY = y;
+                    for( int j = x; j <= endFlipX; j++)
+                    {
+                        board[j][y] = whoseTurn;
+                    }
+                }
+            }    
+        }
+        if( x-1 > 0 && board[x-1][y] == getOppositeColor(whoseTurn)) // w
+        {
+            for( int i = x; i >= 0; i--) // w  
+            {
+                if( board[i][y] == whoseTurn)
+                {
+                    endFlipX = i;
+                    endFlipY = y;
+                    for( int j = x; j >= endFlipX; j--)
+                    {
+                        board[j][y] = whoseTurn;
+                    }
+                }
+            }   
+        }
+        if( (x-1 > 0 && y-1 > 0) && (board[x-1][y-1] == getOppositeColor(whoseTurn))) // nw
+        {
+            for( int i = 1; x-i >= 0 && y-i >= 0; i++) // nw  
+            {
+                if( board[x-i][y-i] == whoseTurn)
+                {
+                    endFlipX = x-i;
+                    endFlipY = y-i;
+                    for( int j = 1; x-j >= endFlipX && y-j >= endFlipY; j++)
+                    {
+                        board[x-j][y-j] = whoseTurn;
+                    }
+                }
+            }     
+        }
+        if( (x+1 < 7 && y-1 > 0) && (board[x+1][y-1] == getOppositeColor(whoseTurn))) // ne
+        {
+            for( int i = 1; x+i <= 7 && y-i >= 0; i++) // ne  
+            {
+                if( board[x+i][y-i] == whoseTurn)
+                {
+                    endFlipX = x+i;
+                    endFlipY = y-i;
+                    for( int j = 1; x+j <= endFlipX && y-j >= endFlipY; j++)
+                    {
+                        board[x+j][y-j] = whoseTurn;
+                    }
+                }
+            }     
+        }
+        if( (x-1 > 0 && y+1 < 7) && (board[x-1][y+1] == getOppositeColor(whoseTurn))) // sw
+        {
+            for( int i = 1; x-i >= 0 && y+i <= 7; i++) // sw 
+            {
+                if( board[x-i][y+i] == whoseTurn)
+                {
+                    endFlipX = x-i;
+                    endFlipY = y+i;
+                    for( int j = 1; x-j >= endFlipX && y+j <= endFlipY; j++)
+                    {
+                        board[x-j][y+j] = whoseTurn;
+                    }
+                }
+            }    
+        }
+        if( (x+1 < 7 && y+1 < 7) && (board[x+1][y+1] == getOppositeColor(whoseTurn))) // se
+        {
+            for( int i = 1; x+i <= 7 && y+i <= 7; i++) // se  
+            {
+                if( board[x+i][y+i] == whoseTurn)
+                {
+                    endFlipX = x+i;
+                    endFlipY = y+i;
+                    for( int j = 1; x+j <= endFlipX && y+j <= endFlipY; j++)
+                    {
+                        board[x+j][y+j] = whoseTurn;
+                    }
+                }
+            }     
+        }
+    }
+    
+    public void calculatePoints()
+    {
+        playerPieces = 0;
+        opponentPieces = 0;
+        for( int row = 0; row < 8; row++)
+        {
+            for( int col = 0; col < 8; col++)
+            {
+                if( board[row][col] == BLACK)
+                {
+                    playerPieces++;
+                }
+                else if( board[row][col] == WHITE)
+                {
+                    opponentPieces++;
+                }
+            }
+        }
     }
     
     /**
@@ -251,30 +419,30 @@ class Surface extends JPanel
             int y = e.getY(); 
 
             if( // check to make sure click is on the board
-            x > LEFT_MARGIN && x < LEFT_MARGIN+480
-            && y > TOP_MARGIN && y < TOP_MARGIN+480
+                x > LEFT_MARGIN && x < LEFT_MARGIN+480
+             && y > TOP_MARGIN && y < TOP_MARGIN+480
                 // check if spot is empty
-            && board[(x-LEFT_MARGIN)/60][(y-TOP_MARGIN)/60] == EMPTY
+             && board[(x-LEFT_MARGIN)/60][(y-TOP_MARGIN)/60] == EMPTY
                 // check if it makes sandwich
-            && makesSandwich((x-LEFT_MARGIN)/60, (y-TOP_MARGIN)/60) 
+             && makesSandwich((x-LEFT_MARGIN)/60, (y-TOP_MARGIN)/60) 
                 //&& whoseTurn == BLACK 
             )
             {
+                flip((x-LEFT_MARGIN)/60, (y-TOP_MARGIN)/60);
                 board[(x-LEFT_MARGIN)/60][(y-TOP_MARGIN)/60] = whoseTurn;
-
+                
                 // tallies points and alternates between turns
+                calculatePoints();
                 if( whoseTurn == BLACK)
                 {
-                    playerPieces++;
                     whoseTurn = WHITE;
                 }
                 else if( whoseTurn == WHITE)
                 {
-                    opponentPieces++;
                     whoseTurn = BLACK;
                 }
             }
-
+  
             repaint();
         } // end mousePressed
 
