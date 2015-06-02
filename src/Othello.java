@@ -1,6 +1,5 @@
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
-import java.awt.Color;
 
 public class Othello extends JFrame 
 {
@@ -14,10 +13,10 @@ public class Othello extends JFrame
         add(new Surface()); // creates the game field surface
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(700, 700); 
+        setSize(800, 700); 
         setResizable(false); // prevents player from resizing window
         setLocationRelativeTo(null);           
-    } // end WhackAMole
+    } // end Othello
 
     /** 
      * runs the game
@@ -34,4 +33,4 @@ public class Othello extends JFrame
                 }
             });     
     } // end method main
-} // end class WhackAMole
+} // end class Othello
